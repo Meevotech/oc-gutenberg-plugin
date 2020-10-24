@@ -69,27 +69,29 @@ class Gutenberg extends FormWidgetBase
         // The Gutenberg editor expects React, ReactDOM, Moment and JQuery to be in the environment it runs in.
         // An easy way to do this would be to add the following lines to your page:
         // Jquery already on page by default OctoberCMS env.
-        $this->addJs('js/react.production.min.js', 'Meevo.Gutenberg');
-        $this->addJs('js/react-dom.production.min.js', 'Meevo.Gutenberg');
+        if (!request()->ajax()) {
+            $this->addJs('js/react.production.min.js', 'Meevo.Gutenberg');
+            $this->addJs('js/react-dom.production.min.js', 'Meevo.Gutenberg');
 
-        // Gutenberg assets
-        $this->addCss('css/laraberg.css', 'Meevo.Gutenberg');
-        $this->addJs('js/laraberg.js', 'Meevo.Gutenberg');
+            // Gutenberg assets
+            $this->addCss('css/laraberg.css', 'Meevo.Gutenberg');
+            $this->addJs('js/laraberg.js', 'Meevo.Gutenberg');
 
-        // Formwidget assets
-        $this->addJs('js/gutenberg.js', 'Meevo.Gutenberg');
-        $this->addCss('css/gutenberg.css', 'Meevo.Gutenberg');
+            // Formwidget assets
+            $this->addJs('js/gutenberg.js', 'Meevo.Gutenberg');
+            $this->addCss('css/gutenberg.css', 'Meevo.Gutenberg');
 
-        \Event::fire('gutenberg.blocks', [$this]);
+            \Event::fire('gutenberg.blocks', [$this]);
 
-        $this->addCss($this->_css);
-        $this->addJs($this->_js);
+            $this->addCss($this->_css);
+            $this->addJs($this->_js);
 
-        foreach ($this->_js_single as $js) {
-            $this->addJs($js);
-        }
-        foreach ($this->_css_single as $css) {
-            $this->addCss($css);
+            foreach ($this->_js_single as $js) {
+                $this->addJs($js);
+            }
+            foreach ($this->_css_single as $css) {
+                $this->addCss($css);
+            }
         }
     }
 
