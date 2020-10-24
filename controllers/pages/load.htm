@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="csrf-token" content="<?= csrf_token() ?>">
+    <?php
+    $coreBuild = System\Models\Parameter::get('system::core.build', 1);
+
+    $styles = [
+        Url::asset('modules/system/assets/ui/storm.css'),
+        Backend::skinAsset('assets/css/october.css'),
+    ];
+
+    // Scripts
+    $scripts = [
+        Backend::skinAsset('assets/js/vendor/jquery.min.js'),
+        Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'),
+        Url::asset('modules/system/assets/js/framework.js')
+    ];
+    if (Config::get('develop.decompileBackendAssets', false)) {
+        $scripts = array_merge($scripts, Backend::decompileAsset('modules/system/assets/ui/storm.js'));
+        $scripts = array_merge($scripts, Backend::decompileAsset('assets/js/october.js', true));
+    } else {
+        $scripts = array_merge($scripts, [Url::asset('modules/system/assets/ui/storm-min.js')]);
+        $scripts = array_merge($scripts, [Backend::skinAsset('assets/js/october-min.js')]);
+    }
+?>
+
+<?php foreach ($styles as $style) : ?>
+    <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="stylesheet" importance="high">
+    <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="preload" as="style" importance="high">
+<?php endforeach; ?>
+
+<?php foreach ($scripts as $script) : ?>
+    <script data-cfasync="false" src="<?= $script . '?v=' . $coreBuild; ?>" importance="high"></script>
+<?php endforeach; ?>
+<style>
+.sweet-overlay, .sweet-alert {
+    display:none;
+}
+</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+<?=$form->render();?>
+<?php echo $this->makeAssets('css') ?>
+<?php echo $this->makeAssets('js') ?>
+
+</body>
+</html>
